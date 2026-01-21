@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Monitoring Jamur Tiram</title>
+  <link rel="stylesheet" href="suhu.css">
+</head>
+
+<body>
+
+  <div class="container">
+
+    <!-- ===== CARD KELEMBAPAN ===== -->
+    <div class="card">
+      <h2>💧 Kelembapan</h2>
+      <div class="value humidity">
+        <span id="hum">--</span> %
+      </div>
+      <footer>Sensor DHT11</footer>
+    </div>
+
+    <!-- ===== CARD SUHU ===== -->
+    <div class="card">
+      <h2>🌡️ Suhu</h2>
+      <div class="value temperature">
+        <span id="temp">--</span> °C
+      </div>
+      <footer>Sensor DHT11</footer>
+    </div>
+
+    <!-- ===== CARD STATUS POMPA ===== -->
+    <div class="card">
+      <h2>⚙️ Status Pompa</h2>
+      <div id="pumpBox" class="pump-box off">
+        POMPA --
+      </div>
+      <footer>Kontrol Otomatis</footer>
+    </div>
+
+  </div>
+
+  <!-- ===== FIREBASE ===== -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+    const firebaseConfig = {
+      databaseURL: "https://jamurtiram1-default-rtdb.asia-southeast1.firebasedatabase.app/"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    const dataRef = ref(db, "sprayer");
+
+    onValue(dataRef, (snapshot) => {
+      const data = snapshot.val();
+      if (!data) return;
+
+      document.getElementById("hum").innerText  = data.humidity;
+      document.getElementById("temp").innerText = data.temperature;
+
+      const pumpBox = document.getElementById("pumpBox");
+
+      if (data.pump === "ON") {
+        pumpBox.innerText = "POMPA ON";
+        pumpBox.classList.remove("off");
+        pumpBox.classList.add("on");
+      } else {
+        pumpBox.innerText = "POMPA OFF";
+        pumpBox.classList.remove("on");
+        pumpBox.classList.add("off");
+      }
+    });
+  </script>
+
+</body>
+</html>
