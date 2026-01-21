@@ -11,7 +11,7 @@
     .container {
       display: flex;
       gap: 25px;
-      flex-wrap: wrap;
+      flex-wrap: wrap;  
       justify-content: center;
     }
 
@@ -66,3 +66,27 @@
       font-size: 12px;
       color: #888;
     }
+
+    /* ===== RESPONSIVE MOBILE ===== */
+@media (max-width: 768px) {
+
+  body {
+    height: auto;
+    padding: 20px 0;
+    align-items: flex-start;
+  }
+
+  .container {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .card {
+    width: 90%;
+    max-width: 350px;
+  }
+
+  .value {
+    font-size: 36px;
+  }
+}
